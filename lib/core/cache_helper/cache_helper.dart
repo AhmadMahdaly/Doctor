@@ -16,7 +16,7 @@ class CacheHelper {
   static void _checkInstance() {
     if (_sharedPreferences == null) {
       throw Exception(
-        "CacheHelper not initialized. Call CacheHelper.init() in your main.dart",
+        'CacheHelper not initialized. Call CacheHelper.init() in your main.dart',
       );
     }
   }
@@ -33,10 +33,10 @@ class CacheHelper {
 
   static Future<bool> set(String key, dynamic value) async {
     _checkInstance();
-    if (value is String) return await _sharedPreferences!.setString(key, value);
-    if (value is int) return await _sharedPreferences!.setInt(key, value);
-    if (value is bool) return await _sharedPreferences!.setBool(key, value);
-    if (value is double) return await _sharedPreferences!.setDouble(key, value);
+    if (value is String) return _sharedPreferences!.setString(key, value);
+    if (value is int) return _sharedPreferences!.setInt(key, value);
+    if (value is bool) return _sharedPreferences!.setBool(key, value);
+    if (value is double) return _sharedPreferences!.setDouble(key, value);
     return false;
   }
 
@@ -51,12 +51,12 @@ class CacheHelper {
 
   static Future<bool> remove(String key) async {
     _checkInstance();
-    return await _sharedPreferences!.remove(key);
+    return _sharedPreferences!.remove(key);
   }
 
   static Future<bool> clear() async {
     _checkInstance();
-    return await _sharedPreferences!.clear();
+    return _sharedPreferences!.clear();
   }
 
   static Future<void> setSecured(String key, String value) async {
@@ -70,7 +70,7 @@ class CacheHelper {
     if (kDebugMode) {
       print('FlutterSecureStorage: Reading key: $key');
     }
-    return await _secureStorage.read(key: key);
+    return _secureStorage.read(key: key);
   }
 
   static Future<void> removeSecured(String key) async {

@@ -1,9 +1,10 @@
+// ignore_for_file: no_default_cases, avoid_dynamic_calls
+
 import 'package:dio/dio.dart';
 
 abstract class Failure {
-  final String errMessage;
-
   const Failure(this.errMessage);
+  final String errMessage;
 }
 
 class ServerFailure extends Failure {
@@ -47,7 +48,7 @@ class ServerFailure extends Failure {
         statusCode == 401 ||
         statusCode == 403 ||
         statusCode == 422) {
-      return ServerFailure(response.data["message"]);
+      return ServerFailure(response.data['message'].toString());
     } else if (statusCode == 404) {
       return ServerFailure('Your request not found, Please try later!');
     } else if (statusCode == 500) {

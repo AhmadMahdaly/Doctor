@@ -3,7 +3,6 @@ import 'package:doctor_app/core/theme/app_colors.dart';
 import 'package:doctor_app/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
-
 class CustomPrimaryButton extends StatelessWidget {
   const CustomPrimaryButton({
     required this.text,

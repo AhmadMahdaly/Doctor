@@ -1,9 +1,8 @@
+import 'package:doctor_app/core/responsive/responsive_config.dart';
+import 'package:doctor_app/core/shared_widgets/custom_primary_textfield.dart';
 import 'package:doctor_app/core/theme/app_colors.dart';
 import 'package:doctor_app/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
-import '../responsive/responsive_config.dart';
-import '../shared_widgets/custom_primary_textfield.dart';
-
 
 class CustomDropdownButtonFormField<T> extends StatelessWidget {
   const CustomDropdownButtonFormField({

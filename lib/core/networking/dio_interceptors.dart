@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:doctor_app/core/cache_helper/cache_helper.dart';
+import 'package:doctor_app/core/cache_helper/cache_values.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
-import '../cache_helper/cache_helper.dart';
-import '../cache_helper/cache_values.dart';
 
 class DioInterceptors {
   DioInterceptors(this.dio);

@@ -4,7 +4,6 @@ import 'package:doctor_app/core/theme/app_colors.dart';
 import 'package:doctor_app/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
-
 class Appthemes {
   static ThemeData lightTheme() {
     return ThemeData(
@@ -19,7 +18,7 @@ class Appthemes {
         titleMedium: AppTextStyles.style16W500,
       ),
       appBarTheme: AppBarTheme(
-        iconTheme:  IconThemeData(
+        iconTheme: const IconThemeData(
           color: AppColors.scaffoldBackgroundLightColor,
         ),
         toolbarHeight: 100.h,
@@ -76,5 +75,12 @@ class Appthemes {
         ),
       ),
     );
+  }
+}
+
+void unfocusScope(BuildContext context) {
+  final currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+    currentFocus.unfocus();
   }
 }
