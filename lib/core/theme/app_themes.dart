@@ -12,7 +12,6 @@ class Appthemes {
       primaryColor: AppColors.primaryColor,
       scaffoldBackgroundColor: AppColors.scaffoldBackgroundLightColor,
       fontFamily: kPrimaryFont,
-
       textTheme: TextTheme(
         titleLarge: AppTextStyles.style18W800,
         titleMedium: AppTextStyles.style16W500,
@@ -24,6 +23,7 @@ class Appthemes {
         toolbarHeight: 100.h,
         titleTextStyle: AppTextStyles.style18Bold.copyWith(
           color: AppColors.scaffoldBackgroundLightColor,
+          fontFamily: kPrimaryFont,
         ),
         backgroundColor: AppColors.primaryColor,
         surfaceTintColor: AppColors.scaffoldBackgroundLightColor,
@@ -66,7 +66,7 @@ class Appthemes {
       /// ستايل الزر الثانوي (TextButton)
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.secondaryColor,
+          foregroundColor: AppColors.thirdColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.r),
           ),
