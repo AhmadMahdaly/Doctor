@@ -1,0 +1,54 @@
+CREATE TABLE profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name TEXT,
+  phone_number TEXT,
+  role TEXT NOT NULL CHECK (role IN ('doctor', 'patient'))
+);
+
+CREATE TABLE appointments (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  patient_id UUID NOT NULL REFERENCES public.profiles(id),
+  doctor_id UUID NOT NULL REFERENCES public.profiles(id),
+  appointment_time TIMESTAMPTZ NOT NULL,
+  status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'completed', 'cancelled')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (doctor_id, appointment_time)
+);
+
+CREATE TABLE doctor_availability (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  doctor_id UUID NOT NULL REFERENCES public.profiles(id),
+  day_of_week INT NOT NULL CHECK (day_of_week BETWEEN 1 AND 7), 
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT doctor_availability_doctor_id_day_of_week_key UNIQUE (doctor_id, day_of_week)
+);
+
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE doctor_availability ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow authenticated users to read profiles" ON public.profiles FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "Allow individual update access" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+
+CREATE POLICY "Allow individual read access for appointments" ON public.appointments FOR SELECT USING (auth.uid() = patient_id OR auth.uid() = doctor_id);
+CREATE POLICY "Allow patient to create appointments" ON public.appointments FOR INSERT WITH CHECK (auth.uid() = patient_id);
+CREATE POLICY "Allow users to update their own appointments" ON public.appointments FOR UPDATE USING (auth.uid() = patient_id OR auth.uid() = doctor_id);
+
+CREATE POLICY "Allow authenticated users to read availability" ON public.doctor_availability FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "Allow doctor to manage their availability" ON public.doctor_availability FOR ALL USING (auth.uid() = doctor_id);
+
+
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name, role)
+  VALUES (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'role');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
