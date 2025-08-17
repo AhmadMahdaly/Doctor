@@ -7,14 +7,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await CacheHelper.init();
-  await setupGetIt();
+
   // Bloc.observer = MyBlocObserver();
   await Supabase.initialize(
-    url: kSupabaseUrl, 
+    url: kSupabaseUrl,
     anonKey: kAnonKey,
   );
-
+  await CacheHelper.init();
+  await setupGetIt();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
